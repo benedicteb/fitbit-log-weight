@@ -1,0 +1,5 @@
+<svg viewport-fill="black">
+  <text id="status-message" class="status-message" />
+  <text id="weight-logged" class="weight-logged" />
+  <text id="date" class="date" />
+</svg>

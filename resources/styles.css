@@ -1,0 +1,26 @@
+text {
+  text-length: 99;
+  fill: "white";
+  font-family: System-Regular;
+  font-size: 32;
+  font-weight: regular;
+}
+
+.status-message {
+  text-anchor: middle;
+  x: 50%;
+  y: 50%+5;
+}
+
+.weight-logged {
+  text-anchor: middle;
+  x: 50%;
+  y: 50%+20;
+  font-size: 64;
+}
+
+.date {
+  text-anchor: middle;
+  x: 50%;
+  y: 30;
+}
