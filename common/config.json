@@ -1,4 +1,4 @@
 {
-  "debug": true,
+  "debug": false,
   "localStorageFile": "log_weight_storage.json"
 }
