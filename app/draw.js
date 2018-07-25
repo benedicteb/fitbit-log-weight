@@ -13,8 +13,14 @@ const drawTodayScreen = () => {
     const today = localStorage.today;
 
     DATE.text = today.date;
-    WEIGHT_LOGGED.text = `${today.value} kg`;
-    STATUS_MESSAGE.text = "";
+
+    if (!today.value) {
+      STATUS_MESSAGE.text = "No entry today";
+      WEIGHT_LOGGED.text = "";
+    } else {
+      WEIGHT_LOGGED.text = `${today.value} kg`;
+      STATUS_MESSAGE.text = "";
+    }
   } else {
     WEIGHT_LOGGED.text = "";
     DATE.text = "";
