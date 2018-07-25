@@ -8,7 +8,7 @@ const initMessaging = () => {
   // Message is received
   messaging.peerSocket.onmessage = evt => {
     debug(`App received: ${JSON.stringify(evt, undefined, 2)}`);
-    
+
     if (evt.data.key === "WEIGHT_TODAY") {
       writeLocalStorage("today", {
         date: evt.data.date,

@@ -15,7 +15,7 @@ const generateSettings = () => (
         clientId={secrets.oauth.clientId}
         clientSecret={secrets.oauth.clientSecret}
         scope="weight"
-        onAccessToken={async (data) => {
+        onAccessToken={async data => {
           console.log(data);
         }}
       />

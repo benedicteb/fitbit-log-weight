@@ -1,11 +1,11 @@
 import { readFileSync, writeFileSync, statSync } from "fs";
 
 import config from "../common/config.json";
-import { debug } from "../common/log.js";
+import { debug } from "../common/log.js";
 
 const getLocalStorage = () => {
   const filename = config.localStorageFile;
-  
+
   try {
     statSync(filename);
   } catch (error) {
@@ -15,9 +15,7 @@ const getLocalStorage = () => {
 
   const localStorage = readFileSync(filename, "json");
 
-  debug(
-    `Local storage fetched: ${JSON.stringify(localStorage, undefined, 2)}`
-  );
+  debug(`Local storage fetched: ${JSON.stringify(localStorage, undefined, 2)}`);
 
   return localStorage;
 };

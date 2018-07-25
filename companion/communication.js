@@ -1,6 +1,6 @@
 import * as messaging from "messaging";
 
-import { debug } from "../common/log.js";
+import { debug } from "../common/log.js";
 import { restoreSettings } from "companionSettings";
 
 const initMessaging = () => {
