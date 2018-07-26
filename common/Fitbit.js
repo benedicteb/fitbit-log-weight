@@ -7,6 +7,9 @@ const URL_BASE = "https://api.fitbit.com/1";
 const LOGGED_IN_USER = "-";
 const WEIGHT_URL = `${URL_BASE}/user/${LOGGED_IN_USER}/body/log/weight`;
 
+const MAX_RETRIES = 3;
+let retries = 0;
+
 class Fitbit {
   constructor(oauthData) {
     this.oauthData = oauthData;
@@ -56,13 +59,23 @@ class Fitbit {
             if (element.errorType === "expired_token") {
               debug("Token expired - refreshing");
 
-              this.refreshTokens().then(data => {
+              return this.refreshTokens().then(data => {
                 debug("Token refreshed");
+
+                if (retries < MAX_RETRIES) {
+                  debug(
+                    `Retrying original request, try ${retries +
+                      1} out of ${MAX_RETRIES}`
+                  );
+                  retries++;
+                  return this.getUrl(url);
+                }
               });
             }
           });
         }
 
+        retries = 0;
         return response.body;
       })
       .catch(err => {
