@@ -30,17 +30,29 @@ class Fitbit {
         }`
       }
     })
-      .then(response => response.json())
-      .then(jsonData => {
-        debug(`Response: ${JSON.stringify(jsonData, undefined, 2)}`);
-        return jsonData;
-      })
-      .catch(err => {
-        error(err);
-        const jsonData = err.json();
+      .then(response => {
+        if (!response.ok) {
+          debug(`Bad response: ${response.status}`);
+        }
 
-        if (err.status === 401) {
-          jsonData.errors.forEach(element => {
+        return response.json().then(json => {
+          return {
+            status: response.status,
+            body: json
+          };
+        });
+      })
+      .then(response => {
+        debug(
+          `Response: ${response.status} ${JSON.stringify(
+            response.body,
+            undefined,
+            2
+          )}`
+        );
+
+        if (response.status === 401) {
+          response.body.errors.forEach(element => {
             if (element.errorType === "expired_token") {
               debug("Token expired - refreshing");
 
@@ -50,6 +62,11 @@ class Fitbit {
             }
           });
         }
+
+        return response.body;
+      })
+      .catch(err => {
+        error(err);
       });
   }
 
@@ -58,6 +75,8 @@ class Fitbit {
     const username = secrets.oauth.clientId;
     const password = secrets.oauth.clientSecret;
     const b64Auth = "Basic " + b64EncodeUnicode(`${username}:${password}`);
+    const refresh_token = this.oauthData.refresh_token;
+    const formBody = `grant_type=refresh_token&refresh_token=${refresh_token}`;
 
     debug("Refresh Oauth token");
 
@@ -67,17 +86,24 @@ class Fitbit {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: b64Auth
       },
-      body: JSON.stringify({
-        grant_type: "refresh_token",
-        refresh_token: this.oauthData.refresh_token
-      })
+      body: formBody
     })
+      .then(response => {
+        if (!response.ok) {
+          debug(`Bad response when refreshing: ${response.status}`);
+        }
+
+        return response;
+      })
       .then(response => response.json())
       .then(jsonData => {
         debug(
           `Refresh tokens response: ${JSON.stringify(jsonData, undefined, 2)}`
         );
+
         this.oauthData = jsonData;
+
+        // TODO Update app settings
       });
   }
 }
