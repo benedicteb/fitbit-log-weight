@@ -8,6 +8,8 @@ import {
   getCurrentAboutToBeLoggedWeight
 } from "draw";
 import { sendVal } from "communication";
+import { writeLocalStorage } from "localStorage";
+import { getDateString } from "../common/utils.js";
 
 const ADD_BUTTON = document.getElementById("btn-add");
 const SAVE_BUTTON = document.getElementById("btn-save");
@@ -20,11 +22,18 @@ const initListeners = () => {
   };
 
   SAVE_BUTTON.onactivate = event => {
+    const value = getCurrentAboutToBeLoggedWeight();
+
     renderSaveEntry();
 
     sendVal({
       key: "WEIGHT_LOGGED_TODAY",
-      value: getCurrentAboutToBeLoggedWeight()
+      value: value
+    });
+
+    writeLocalStorage("today", {
+      date: getDateString(new Date()),
+      value: value
     });
   };
 

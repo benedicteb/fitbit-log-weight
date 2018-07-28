@@ -108,7 +108,7 @@ const drawTodayScreen = () => {
       if (!localStorage.today) {
         WEIGHT_LOGGED.text = "";
         DATE.text = "";
-        STATUS_MESSAGE.text = "Error fetching data. Try restarting app";
+        STATUS_MESSAGE.text = "Visit settings to log in";
       }
     }, 5 * 1000);
   }

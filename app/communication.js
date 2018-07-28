@@ -1,7 +1,7 @@
 import * as messaging from "messaging";
 
-import { debug } from "../common/log.js";
-import { writeLocalStorage } from "localStorage";
+import { debug, error } from "../common/log.js";
+import { getLocalStorage, writeLocalStorage } from "localStorage";
 import { drawTodayScreen } from "draw";
 
 const initMessaging = () => {
@@ -10,11 +10,26 @@ const initMessaging = () => {
     debug(`App received: ${JSON.stringify(evt, undefined, 2)}`);
 
     if (evt.data.key === "WEIGHT_TODAY") {
+      const localStorage = getLocalStorage();
+      let changed = false;
+
+      if (localStorage.today) {
+        const lastDate = localStorage.today.date;
+        const lastValue = localStorage.today.value;
+
+        if (lastDate != evt.data.date || lastValue != evt.data.value) {
+          changed = true;
+        }
+      }
+
       writeLocalStorage("today", {
         date: evt.data.date,
         value: evt.data.value
       });
-      drawTodayScreen();
+
+      if (changed) {
+        drawTodayScreen();
+      }
     }
 
     if (evt.data.key === "LATEST_ENTRY") {

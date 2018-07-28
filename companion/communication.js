@@ -1,7 +1,7 @@
 import * as messaging from "messaging";
 import { settingsStorage } from "settings";
 
-import { debug } from "../common/log.js";
+import { debug, error } from "../common/log.js";
 import { restoreSettings } from "companionSettings";
 import Fitbit from "Fitbit";
 
