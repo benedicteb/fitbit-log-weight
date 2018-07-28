@@ -1,7 +1,9 @@
 import * as messaging from "messaging";
+import { settingsStorage } from "settings";
 
 import { debug } from "../common/log.js";
 import { restoreSettings } from "companionSettings";
+import Fitbit from "Fitbit";
 
 const initMessaging = () => {
   // Message socket opens
@@ -17,7 +19,18 @@ const initMessaging = () => {
 
   // Message is received
   messaging.peerSocket.onmessage = evt => {
-    debug(`Companion received: ${JSON.stringify(evt)}`);
+    debug(`Companion received: ${JSON.stringify(evt, undefined, 2)}`);
+
+    if (evt.data.key === "WEIGHT_LOGGED_TODAY") {
+      const oauthData = settingsStorage.getItem("oauth");
+
+      if (oauthData) {
+        const oauthDataParsed = JSON.parse(oauthData);
+        const fitbit = new Fitbit(oauthDataParsed);
+
+        fitbit.postWeightToday(evt.data.value);
+      }
+    }
   };
 
   // Problem with message socket

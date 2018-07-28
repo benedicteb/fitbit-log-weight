@@ -16,6 +16,10 @@ const initMessaging = () => {
       });
       drawTodayScreen();
     }
+
+    if (evt.data.key === "LATEST_ENTRY") {
+      writeLocalStorage("latestEntry", evt.data.value);
+    }
   };
 
   // Message socket opens
@@ -34,4 +38,18 @@ const initMessaging = () => {
   };
 };
 
-export { initMessaging };
+// Send data to device using Messaging API
+const sendVal = data => {
+  if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
+    try {
+      messaging.peerSocket.send(data);
+      debug(`Sent to companion: ${JSON.stringify(data, undefined, 2)}`);
+    } catch (err) {
+      error(`Exception when sending to companion`);
+    }
+  } else {
+    error("Unable to send data to app");
+  }
+};
+
+export { initMessaging, sendVal };

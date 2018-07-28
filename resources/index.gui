@@ -1,5 +1,30 @@
 <svg viewport-fill="black">
   <text id="status-message" class="status-message" />
   <text id="weight-logged" class="weight-logged" />
+  <text id="weight-about-to-be-logged" class="weight-about-to-be-logged" />
   <text id="date" class="date" />
+
+  <use id="btn-increment" href="#combo-button-upper-right" fill="fb-white">
+    <set href="combo-button-stroke" attributeName="display" to="inline"/>
+    <set href="combo-button-icon" attributeName="href" to="icons/sqr_btn_plus_p.png"/>
+    <set href="combo-button-icon-press" attributeName="href" to="icons/sqr_btn_plus_p.png"/>
+  </use>
+
+  <use id="btn-decrease" href="#combo-button-lower-right" fill="fb-white">
+    <set href="combo-button-stroke" attributeName="display" to="inline"/>
+    <set href="combo-button-icon" attributeName="href" to="icons/sqr_btn_minus_p.png"/>
+    <set href="combo-button-icon-press" attributeName="href" to="icons/sqr_btn_minus_p.png"/>
+  </use>
+
+  <use id="btn-save" href="#combo-button-lower-left" fill="fb-blue">
+    <set href="combo-button-stroke" attributeName="display" to="inline"/>
+    <set href="combo-button-icon" attributeName="href" to="icons/btn_combo_check_p.png"/>
+    <set href="combo-button-icon-press" attributeName="href" to="icons/btn_combo_check_press_p.png"/>
+  </use>
+
+  <use id="btn-add" href="#combo-button-lower-left" fill="fb-green">
+    <set href="combo-button-stroke" attributeName="display" to="inline"/>
+    <set href="combo-button-icon" attributeName="href" to="icons/sqr_btn_plus_p.png"/>
+    <set href="combo-button-icon-press" attributeName="href" to="icons/sqr_btn_plus_p.png"/>
+  </use>
 </svg>

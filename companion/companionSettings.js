@@ -1,7 +1,7 @@
 import { settingsStorage } from "settings";
 
 import { debug } from "../common/log.js";
-import Fitbit from "../common/Fitbit.js";
+import Fitbit from "Fitbit";
 import { sendVal } from "communication";
 import { getDateString } from "../common/utils.js";
 
@@ -25,6 +25,15 @@ const restoreSettings = () => {
     const oauthDataParsed = JSON.parse(oauthData);
     const fitbit = new Fitbit(oauthDataParsed);
 
+    fitbit.getLastEntry().then(lastEntry => {
+      if (lastEntry) {
+        sendVal({
+          key: "LATEST_ENTRY",
+          value: lastEntry.weight
+        });
+      }
+    });
+
     fitbit.getWeightToday().then(data => {
       if (data.weight.length >= 1) {
         const entry = data.weight[0];
@@ -39,10 +48,14 @@ const restoreSettings = () => {
           key: "WEIGHT_TODAY",
           date: getDateString(new Date()),
           value: null
-        })
+        });
       }
     });
   }
 };
 
-export { initSettings, restoreSettings };
+const updateOauthSettings = oauthData => {
+  settingsStorage.setItem("oauth", oauthData);
+};
+
+export { initSettings, restoreSettings, updateOauthSettings };

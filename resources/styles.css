@@ -19,8 +19,31 @@ text {
   font-size: 64;
 }
 
+.weight-about-to-be-logged {
+  text-anchor: middle;
+  x: 50%;
+  y: 50%+20;
+  font-size: 64;
+}
+
 .date {
   text-anchor: middle;
   x: 50%;
-  y: 30;
+  y: 30%;
+}
+
+#btn-add {
+  display: "none";
+}
+
+#btn-save {
+  display: "none";
+}
+
+#btn-increment {
+  display: "none";
+}
+
+#btn-decrease {
+  display: "none";
 }
