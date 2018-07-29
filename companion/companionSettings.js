@@ -55,7 +55,8 @@ const restoreSettings = () => {
 };
 
 const updateOauthSettings = oauthData => {
-  settingsStorage.setItem("oauth", oauthData);
+  settingsStorage.setItem("oauth", JSON.stringify(oauthData));
+  debug(`Wrote new Oauth data to settings`);
 };
 
 export { initSettings, restoreSettings, updateOauthSettings };
