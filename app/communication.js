@@ -2,7 +2,7 @@ import * as messaging from "messaging";
 
 import { debug, error } from "../common/log.js";
 import { getLocalStorage, writeLocalStorage } from "localStorage";
-import { drawTodayScreen, renderError } from "draw";
+import { drawTodayScreen, renderError, stopSpinner } from "draw";
 
 const initMessaging = () => {
   // Message is received
@@ -32,6 +32,9 @@ const initMessaging = () => {
       if (changed) {
         drawTodayScreen();
       }
+
+      // Stop spinner after data is received for today
+      stopSpinner();
     } else if (evt.data.key === "LATEST_ENTRY") {
       writeLocalStorage("latestEntry", evt.data.value);
     } else if (evt.data.key === "ERROR") {

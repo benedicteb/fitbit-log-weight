@@ -6,6 +6,8 @@
 
   <image id="error-icon" href="icons/btn_combo_x_thin_p.png" load="sync" />
 
+  <use id="spinner" href="#spinner" />
+
   <use id="btn-increment" href="#combo-button-upper-right" fill="fb-white">
     <set href="combo-button-stroke" attributeName="display" to="inline"/>
     <set href="combo-button-icon" attributeName="href" to="icons/sqr_btn_plus_p.png"/>

@@ -17,10 +17,13 @@ const SAVE_BUTTON = document.getElementById("btn-save");
 const INCREASE_BUTTON = document.getElementById("btn-increment");
 const DECREASE_BUTTON = document.getElementById("btn-decrease");
 const ERROR_ICON = document.getElementById("error-icon");
+const SPINNER = document.getElementById("spinner");
 
 const NOTHING_LOGGED_MESSAGE = "No entry";
 const DEFAULT_WEIGHT = 60;
 const WEIGHT_INCREMENT = 0.1;
+const SPINNER_TIMEOUT_SECONDS = 5;
+const LOADING_TIMEOUT_SECONDS = 3;
 
 const nothingLoggedToday = dateString => {
   DATE.text = dateString;
@@ -80,6 +83,7 @@ const drawTodayScreen = () => {
   const todayString = getDateString(new Date());
 
   if (localStorage.today) {
+    // ^ Could be data from yesterday
     const today = localStorage.today;
 
     if (today.date != todayString) {
@@ -98,7 +102,6 @@ const drawTodayScreen = () => {
       ADD_BUTTON.style.display = "none";
     }
   } else {
-    // Nothing has ever been logged?
     WEIGHT_LOGGED.text = "";
     DATE.text = "";
     STATUS_MESSAGE.text = "Loading...";
@@ -111,12 +114,29 @@ const drawTodayScreen = () => {
         DATE.text = "";
         STATUS_MESSAGE.text = "Visit settings to log in";
       }
-    }, 3 * 1000);
+    }, LOADING_TIMEOUT_SECONDS * 1000);
   }
 };
 
 const renderError = () => {
+  stopSpinner();
   ERROR_ICON.style.display = "inline";
+};
+
+const startSpinner = () => {
+  SPINNER.state = "enabled";
+
+  setTimeout(() => {
+    if (SPINNER.state === "enabled") {
+      // If spinner still enabled after 5 seconds
+      stopSpinner();
+      renderError();
+    }
+  }, SPINNER_TIMEOUT_SECONDS * 1000);
+};
+
+const stopSpinner = () => {
+  SPINNER.state = "disabled";
 };
 
 export {
@@ -126,5 +146,7 @@ export {
   renderIncreaseWeight,
   renderDecreaseWeight,
   getCurrentAboutToBeLoggedWeight,
-  renderError
+  renderError,
+  startSpinner,
+  stopSpinner
 };

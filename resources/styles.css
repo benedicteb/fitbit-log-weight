@@ -53,4 +53,14 @@ text {
   fill: "fb-red";
   width: 40;
   height: 40;
+  x: 10;
+  y: 10;
+}
+
+#spinner {
+  x: 10;
+  y: 10;
+  width: 40;
+  height: 40;
+  fill: "fb-white";
 }
