@@ -1,7 +1,7 @@
 <svg viewport-fill="black">
-  <text id="status-message" class="status-message" />
-  <text id="weight-logged" class="weight-logged" />
-  <text id="weight-about-to-be-logged" class="weight-about-to-be-logged" />
+  <text id="status-message" />
+  <text id="weight-logged" />
+  <text id="weight-about-to-be-logged" />
   <text id="date" class="date" />
   <text id="bmi" />
 
