@@ -110,7 +110,7 @@ const drawTodayScreen = () => {
         DATE.text = "";
         STATUS_MESSAGE.text = "Visit settings to log in";
       }
-    }, 5 * 1000);
+    }, 3 * 1000);
   }
 };
 
