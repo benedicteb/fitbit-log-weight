@@ -47,3 +47,10 @@ text {
 #btn-decrease {
   display: "none";
 }
+
+#error-icon {
+  display: "none";
+  fill: "fb-red";
+  width: 40;
+  height: 40;
+}

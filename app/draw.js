@@ -16,6 +16,7 @@ const ADD_BUTTON = document.getElementById("btn-add");
 const SAVE_BUTTON = document.getElementById("btn-save");
 const INCREASE_BUTTON = document.getElementById("btn-increment");
 const DECREASE_BUTTON = document.getElementById("btn-decrease");
+const ERROR_ICON = document.getElementById("error-icon");
 
 const NOTHING_LOGGED_MESSAGE = "No entry";
 const DEFAULT_WEIGHT = 60;
@@ -114,11 +115,16 @@ const drawTodayScreen = () => {
   }
 };
 
+const renderError = () => {
+  ERROR_ICON.style.display = "inline";
+};
+
 export {
   drawTodayScreen,
   renderAddEntry,
   renderSaveEntry,
   renderIncreaseWeight,
   renderDecreaseWeight,
-  getCurrentAboutToBeLoggedWeight
+  getCurrentAboutToBeLoggedWeight,
+  renderError
 };

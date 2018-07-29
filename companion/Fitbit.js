@@ -4,6 +4,7 @@ import secrets from "../secrets.json";
 import { b64EncodeUnicode } from "../common/base64.js";
 
 import { updateOauthSettings } from "companionSettings";
+import { sendVal } from "communication";
 
 const URL_BASE = "https://api.fitbit.com/1";
 const LOGGED_IN_USER = "-";
@@ -127,9 +128,19 @@ class Fitbit {
                   retries++;
 
                   return this.getUrl(url);
+                } else {
+                  sendVal({
+                    key: "ERROR"
+                  });
                 }
               });
             }
+          });
+        }
+
+        if (response.status >= 400) {
+          sendVal({
+            key: "ERROR"
           });
         }
 
