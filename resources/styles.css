@@ -64,3 +64,9 @@ text {
   height: 40;
   fill: "fb-white";
 }
+
+#bmi {
+  text-anchor: middle;
+  x: 50%;
+  y: 70%+20;
+}

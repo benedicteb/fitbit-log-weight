@@ -41,13 +41,15 @@ const restoreSettings = () => {
         sendVal({
           key: "WEIGHT_TODAY",
           date: entry.date,
-          value: entry.weight
+          value: entry.weight,
+          bmi: entry.bmi
         });
       } else {
         sendVal({
           key: "WEIGHT_TODAY",
           date: getDateString(new Date()),
-          value: null
+          value: null,
+          bmi: null
         });
       }
     });

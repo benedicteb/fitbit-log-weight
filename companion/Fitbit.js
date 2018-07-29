@@ -58,15 +58,9 @@ class Fitbit {
 
   postWeight(date, value) {
     const url = `${WEIGHT_URL}.json`;
+    const body = `weight=${value}&date=${getDateString(date)}`;
 
-    const body = JSON.stringify({
-      weight: value,
-      date: getDateString(date)
-    });
-
-    const body2 = `weight=${value}&date=${getDateString(date)}`;
-
-    return this.postUrl(url, body2);
+    return this.postUrl(url, body);
   }
 
   getUrl(url) {

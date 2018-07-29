@@ -2,6 +2,7 @@ import * as messaging from "messaging";
 import { settingsStorage } from "settings";
 
 import { debug, error } from "../common/log.js";
+
 import { restoreSettings } from "companionSettings";
 import Fitbit from "Fitbit";
 
@@ -28,7 +29,17 @@ const initMessaging = () => {
         const oauthDataParsed = JSON.parse(oauthData);
         const fitbit = new Fitbit(oauthDataParsed);
 
-        fitbit.postWeightToday(evt.data.value);
+        fitbit.postWeightToday(evt.data.value).then(jsonData => {
+          const entry = jsonData.weightLog;
+          debug(`post weight jsonData: ${JSON.stringify(entry, undefined, 2)}`);
+
+          sendVal({
+            key: "WEIGHT_TODAY",
+            date: entry.date,
+            value: entry.weight,
+            bmi: entry.bmi
+          });
+        });
       }
     }
   };

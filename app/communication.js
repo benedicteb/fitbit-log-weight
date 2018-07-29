@@ -16,8 +16,13 @@ const initMessaging = () => {
       if (localStorage.today) {
         const lastDate = localStorage.today.date;
         const lastValue = localStorage.today.value;
+        const lastBmi = localStorage.today.bmi;
 
-        if (lastDate != evt.data.date || lastValue != evt.data.value) {
+        if (
+          lastDate != evt.data.date ||
+          lastValue != evt.data.value ||
+          !lastBmi
+        ) {
           changed = true;
         }
       } else {
@@ -26,7 +31,8 @@ const initMessaging = () => {
 
       writeLocalStorage("today", {
         date: evt.data.date,
-        value: evt.data.value
+        value: evt.data.value,
+        bmi: evt.data.bmi
       });
 
       if (changed) {

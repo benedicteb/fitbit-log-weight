@@ -18,6 +18,7 @@ const INCREASE_BUTTON = document.getElementById("btn-increment");
 const DECREASE_BUTTON = document.getElementById("btn-decrease");
 const ERROR_ICON = document.getElementById("error-icon");
 const SPINNER = document.getElementById("spinner");
+const TXT_BMI = document.getElementById("bmi");
 
 const NOTHING_LOGGED_MESSAGE = "No entry";
 const DEFAULT_WEIGHT = 60;
@@ -30,6 +31,7 @@ const nothingLoggedToday = dateString => {
   STATUS_MESSAGE.text = NOTHING_LOGGED_MESSAGE;
   ADD_BUTTON.style.display = "inline";
   WEIGHT_LOGGED.text = "";
+  TXT_BMI.text = "";
 };
 
 const renderAddEntry = () => {
@@ -98,6 +100,7 @@ const drawTodayScreen = () => {
       nothingLoggedToday(today.date);
     } else {
       WEIGHT_LOGGED.text = `${today.value} kg`;
+      TXT_BMI.text = `BMI: ${today.bmi}`;
       STATUS_MESSAGE.text = "";
       ADD_BUTTON.style.display = "none";
     }

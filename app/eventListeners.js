@@ -10,6 +10,7 @@ import {
 import { sendVal } from "communication";
 import { writeLocalStorage } from "localStorage";
 import { getDateString } from "../common/utils.js";
+import { startSpinner } from "draw";
 
 const ADD_BUTTON = document.getElementById("btn-add");
 const SAVE_BUTTON = document.getElementById("btn-save");
@@ -24,6 +25,7 @@ const initListeners = () => {
   SAVE_BUTTON.onactivate = event => {
     const value = getCurrentAboutToBeLoggedWeight();
 
+    startSpinner();
     renderSaveEntry();
 
     sendVal({
@@ -33,7 +35,8 @@ const initListeners = () => {
 
     writeLocalStorage("today", {
       date: getDateString(new Date()),
-      value: value
+      value: value,
+      bmi: null
     });
   };
 

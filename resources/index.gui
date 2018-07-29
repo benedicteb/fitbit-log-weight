@@ -3,6 +3,7 @@
   <text id="weight-logged" class="weight-logged" />
   <text id="weight-about-to-be-logged" class="weight-about-to-be-logged" />
   <text id="date" class="date" />
+  <text id="bmi" />
 
   <image id="error-icon" href="icons/btn_combo_x_thin_p.png" load="sync" />
 
