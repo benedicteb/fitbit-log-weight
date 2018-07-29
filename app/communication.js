@@ -20,6 +20,8 @@ const initMessaging = () => {
         if (lastDate != evt.data.date || lastValue != evt.data.value) {
           changed = true;
         }
+      } else {
+        changed = true;
       }
 
       writeLocalStorage("today", {
