@@ -116,6 +116,8 @@ const drawTodayScreen = () => {
         WEIGHT_LOGGED.text = "";
         DATE.text = "";
         STATUS_MESSAGE.text = "Visit settings to log in";
+
+        stopSpinner();
       }
     }, LOADING_TIMEOUT_SECONDS * 1000);
   }

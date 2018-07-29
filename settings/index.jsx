@@ -22,7 +22,7 @@ const generateSettings = props => (
         clientSecret={secrets.oauth.clientSecret}
         scope="weight"
         onAccessToken={async data => {
-          console.log(data);
+          debug(data);
         }}
       />
     </Section>
