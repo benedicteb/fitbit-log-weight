@@ -26,6 +26,18 @@ const generateSettings = props => (
         }}
       />
     </Section>
+    <Section title="Units to use for weight">
+       <Select
+         label="Unit"
+         settingsKey="unit"
+         options={[
+          {name: "kg"},
+          {name: "pounds"},
+          {name: "stone"}
+         ]}
+         selectViewTitle="Choose a unit"
+        />
+    </Section>
   </Page>
 );
 

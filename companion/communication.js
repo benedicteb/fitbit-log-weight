@@ -3,14 +3,19 @@ import { settingsStorage } from "settings";
 
 import { debug, error } from "../common/log.js";
 
-import { restoreSettings } from "companionSettings";
+import {
+  sendUnitDataToApp,
+  fetchAndSendWeightToday,
+  fetchAndSendLastEntry,
+  postWeightTodayAndSendResponseToApp
+} from "data";
 import Fitbit from "Fitbit";
 
 const initMessaging = () => {
   // Message socket opens
   messaging.peerSocket.onopen = () => {
     debug("Companion Socket Open");
-    restoreSettings();
+    onPeerSocketOpen();
   };
 
   // Message socket closes
@@ -23,24 +28,7 @@ const initMessaging = () => {
     debug(`Companion received: ${JSON.stringify(evt, undefined, 2)}`);
 
     if (evt.data.key === "WEIGHT_LOGGED_TODAY") {
-      const oauthData = settingsStorage.getItem("oauth");
-
-      if (oauthData) {
-        const oauthDataParsed = JSON.parse(oauthData);
-        const fitbit = new Fitbit(oauthDataParsed);
-
-        fitbit.postWeightToday(evt.data.value).then(jsonData => {
-          const entry = jsonData.weightLog;
-          debug(`post weight jsonData: ${JSON.stringify(entry, undefined, 2)}`);
-
-          sendVal({
-            key: "WEIGHT_TODAY",
-            date: entry.date,
-            value: entry.weight,
-            bmi: entry.bmi
-          });
-        });
-      }
+      postWeightTodayAndSendResponseToApp(evt.data.value);
     }
   };
 
@@ -48,6 +36,12 @@ const initMessaging = () => {
   messaging.peerSocket.onerror = err => {
     error("Connection error: " + err.code + " - " + err.message);
   };
+};
+
+const onPeerSocketOpen = () => {
+  sendUnitDataToApp();
+  fetchAndSendWeightToday();
+  fetchAndSendLastEntry();
 };
 
 // Send data to device using Messaging API

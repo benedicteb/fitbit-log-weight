@@ -8,4 +8,8 @@ const getDateString = date => {
   return `${year}-${month}-${day}`;
 };
 
-export { padNumber, getDateString };
+const setNoDecimals = (number, noOfDecimals, roundMethod) => {
+  return roundMethod(number * Math.pow(10.0, noOfDecimals)) / Math.pow(10.0, noOfDecimals);
+};
+
+export { padNumber, getDateString, setNoDecimals };
