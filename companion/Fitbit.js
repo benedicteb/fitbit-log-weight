@@ -193,9 +193,10 @@ class Fitbit {
           )}`
         );
 
-        if (response.ok) {
-          this.oauthData = jsonData;
-          updateOauthSettings(jsonData);
+        if (response.status === 200) {
+          this.oauthData = response.body;
+          updateOauthSettings(response.body);
+          debug("New tokens saved in instance and settings");
         }
 
         return response;

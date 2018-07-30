@@ -25,37 +25,35 @@ const restoreSettings = () => {
     const oauthDataParsed = JSON.parse(oauthData);
     const fitbit = new Fitbit(oauthDataParsed);
 
-    fitbit.getLastEntry().then(lastEntry => {
-      if (lastEntry) {
-        sendVal({
-          key: "LATEST_ENTRY",
-          value: lastEntry.weight
-        });
-      }
-    });
-
     fitbit.getWeightToday().then(data => {
-      if (!data) {
-        return;
+      if (data) {
+        if (data.weight.length >= 1) {
+          const entry = data.weight[0];
+
+          sendVal({
+            key: "WEIGHT_TODAY",
+            date: entry.date,
+            value: entry.weight,
+            bmi: entry.bmi
+          });
+        } else {
+          sendVal({
+            key: "WEIGHT_TODAY",
+            date: getDateString(new Date()),
+            value: null,
+            bmi: null
+          });
+        }
       }
 
-      if (data.weight.length >= 1) {
-        const entry = data.weight[0];
-
-        sendVal({
-          key: "WEIGHT_TODAY",
-          date: entry.date,
-          value: entry.weight,
-          bmi: entry.bmi
-        });
-      } else {
-        sendVal({
-          key: "WEIGHT_TODAY",
-          date: getDateString(new Date()),
-          value: null,
-          bmi: null
-        });
-      }
+      fitbit.getLastEntry().then(lastEntry => {
+        if (lastEntry) {
+          sendVal({
+            key: "LATEST_ENTRY",
+            value: lastEntry.weight
+          });
+        }
+      });
     });
   }
 };
