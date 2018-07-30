@@ -19,6 +19,7 @@ const DECREASE_BUTTON = document.getElementById("btn-decrease");
 const ERROR_ICON = document.getElementById("error-icon");
 const SPINNER = document.getElementById("spinner");
 const TXT_BMI = document.getElementById("bmi");
+const TXT_ERROR = document.getElementById("txt-error");
 
 const NOTHING_LOGGED_MESSAGE = "No entry";
 const DEFAULT_WEIGHT = 60;
@@ -99,6 +100,8 @@ const drawTodayScreen = () => {
     if (!today.value) {
       nothingLoggedToday(today.date);
     } else {
+      clearError();
+
       WEIGHT_LOGGED.text = `${today.value} kg`;
       TXT_BMI.text = `BMI: ${today.bmi}`;
       STATUS_MESSAGE.text = "";
@@ -126,6 +129,12 @@ const drawTodayScreen = () => {
 const renderError = () => {
   stopSpinner();
   ERROR_ICON.style.display = "inline";
+  TXT_ERROR.text = "Error";
+};
+
+const clearError = () => {
+  ERROR_ICON.style.display = "none";
+  TXT_ERROR.text = "";
 };
 
 const startSpinner = () => {

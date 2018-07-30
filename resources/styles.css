@@ -70,3 +70,10 @@ text {
   x: 50%;
   y: 70%+20;
 }
+
+#txt-error {
+  fill: "fb-red";
+  y: 43;
+  x: 50;
+  font-size: 36;
+}

@@ -35,6 +35,10 @@ const restoreSettings = () => {
     });
 
     fitbit.getWeightToday().then(data => {
+      if (!data) {
+        return;
+      }
+
       if (data.weight.length >= 1) {
         const entry = data.weight[0];
 

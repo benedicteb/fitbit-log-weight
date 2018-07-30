@@ -4,6 +4,7 @@
   <text id="weight-about-to-be-logged" />
   <text id="date" class="date" />
   <text id="bmi" />
+  <text id="txt-error" />
 
   <image id="error-icon" href="icons/btn_combo_x_thin_p.png" load="sync" />
 

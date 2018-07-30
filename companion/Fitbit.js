@@ -11,7 +11,6 @@ const LOGGED_IN_USER = "-";
 const WEIGHT_URL = `${URL_BASE}/user/${LOGGED_IN_USER}/body/log/weight`;
 
 const MAX_RETRIES = 3;
-let retries = 0;
 
 const sortEntriesByDate = entries => {
   const sortedEntries = entries.sort((a, b) => {
@@ -24,6 +23,7 @@ const sortEntriesByDate = entries => {
 class Fitbit {
   constructor(oauthData) {
     this.oauthData = oauthData;
+    this.retries = 0;
   }
 
   getWeightToday() {
@@ -42,6 +42,10 @@ class Fitbit {
 
   getLastEntry() {
     return this.getLastThirtyDays().then(entriesLastThirtyDays => {
+      if (!entriesLastThirtyDays) {
+        return null;
+      }
+
       const sortedEntries = sortEntriesByDate(entriesLastThirtyDays.weight);
 
       if (sortedEntries.length > 0) {
@@ -106,39 +110,47 @@ class Fitbit {
         );
 
         if (response.status === 401) {
-          response.body.errors.forEach(element => {
+          for (const i = 0; i < response.body.errors.length; i++) {
+            const element = response.body.errors[i];
+
             if (element.errorType === "expired_token") {
               debug("Token expired - refreshing");
 
-              this.refreshTokens().then(data => {
+              return this.refreshTokens().then(data => {
                 debug("Token refreshed");
 
-                if (retries < MAX_RETRIES) {
+                if (this.retries < MAX_RETRIES) {
                   debug(
-                    `Retrying original request, try ${retries +
+                    `Retrying original request, try ${this.retries +
                       1} out of ${MAX_RETRIES}`
                   );
 
-                  retries++;
+                  this.retries++;
 
                   return this.getUrl(url);
                 } else {
                   sendVal({
-                    key: "ERROR"
+                    key: "ERROR",
+                    message: "Too many retries"
                   });
+
+                  return null;
                 }
               });
             }
-          });
+          }
         }
 
         if (response.status >= 400) {
           sendVal({
-            key: "ERROR"
+            key: "ERROR",
+            message: `Error ${response.status} in response`
           });
+
+          return null;
         }
 
-        retries = 0;
+        this.retries = 0;
         return response.body;
       })
       .catch(err => {
@@ -181,7 +193,7 @@ class Fitbit {
           )}`
         );
 
-        if (reponse.ok) {
+        if (response.ok) {
           this.oauthData = jsonData;
           updateOauthSettings(jsonData);
         }
