@@ -24,8 +24,7 @@ const TXT_ERROR = document.getElementById("txt-error");
 const NOTHING_LOGGED_MESSAGE = "No entry";
 const DEFAULT_WEIGHT = 60;
 const WEIGHT_INCREMENT = 0.1;
-const SPINNER_TIMEOUT_SECONDS = 5;
-const LOADING_TIMEOUT_SECONDS = 3;
+const LOADING_TIMEOUT_SECONDS = 5;
 
 const nothingLoggedToday = dateString => {
   DATE.text = dateString;
@@ -146,7 +145,7 @@ const startSpinner = () => {
       stopSpinner();
       renderError();
     }
-  }, SPINNER_TIMEOUT_SECONDS * 1000);
+  }, LOADING_TIMEOUT_SECONDS * 1000);
 };
 
 const stopSpinner = () => {
