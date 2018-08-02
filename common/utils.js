@@ -9,7 +9,17 @@ const getDateString = date => {
 };
 
 const setNoDecimals = (number, noOfDecimals, roundMethod) => {
-  return roundMethod(number * Math.pow(10.0, noOfDecimals)) / Math.pow(10.0, noOfDecimals);
+  return (
+    roundMethod(number * Math.pow(10.0, noOfDecimals)) /
+    Math.pow(10.0, noOfDecimals)
+  );
 };
 
-export { padNumber, getDateString, setNoDecimals };
+const addDays = (date, days) => {
+  const date = new Date(date.valueOf());
+  date.setDate(date.getDate() + days);
+
+  return date;
+};
+
+export { padNumber, getDateString, setNoDecimals, addDays };

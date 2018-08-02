@@ -77,7 +77,7 @@ const renderAddEntry = () => {
 
   if (localStorage.latestEntry) {
     WEIGHT_ABOUT_TO_BE_LOGGED.text = `${setNoDecimals(
-      localStorage.latestEntry,
+      localStorage.latestEntry.value,
       unit.decimals,
       Math.floor
     )} ${unit.displayName}`;

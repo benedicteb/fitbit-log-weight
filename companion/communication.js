@@ -29,6 +29,8 @@ const initMessaging = () => {
 
     if (evt.data.key === "WEIGHT_LOGGED_TODAY") {
       postWeightTodayAndSendResponseToApp(evt.data.value);
+    } else if (evt.data.key === "REQUEST_LATEST_ENTRY") {
+      fetchAndSendLastEntry();
     }
   };
 
@@ -41,7 +43,6 @@ const initMessaging = () => {
 const onPeerSocketOpen = () => {
   sendUnitDataToApp();
   fetchAndSendWeightToday();
-  fetchAndSendLastEntry();
 };
 
 // Send data to device using Messaging API

@@ -49,7 +49,8 @@ const fetchAndSendLastEntry = () => {
     if (lastEntry) {
       sendVal({
         key: "LATEST_ENTRY",
-        value: lastEntry.weight
+        value: lastEntry.weight,
+        date: lastEntry.date
       });
     }
   });

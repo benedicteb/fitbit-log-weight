@@ -1,6 +1,8 @@
 import * as messaging from "messaging";
 
 import { debug, error } from "../common/log.js";
+
+import { saveLatestEntry } from "data";
 import { getLocalStorage, writeLocalStorage } from "localStorage";
 import { drawTodayScreen, renderError, stopSpinner } from "draw";
 
@@ -42,15 +44,15 @@ const initMessaging = () => {
       // Stop spinner after data is received for today
       stopSpinner();
     } else if (evt.data.key === "LATEST_ENTRY") {
-      writeLocalStorage("latestEntry", evt.data.value);
+      saveLatestEntry(evt.data.date, evt.data.value);
     } else if (evt.data.key === "ERROR") {
       renderError();
     } else if (evt.data.key === "UNIT") {
       const localStorage = getLocalStorage();
       const newUnit = evt.data.value;
-      
+
       writeLocalStorage("unit", evt.data.value);
-      
+
       if (localStorage.unit != newUnit) {
         drawTodayScreen();
       }
