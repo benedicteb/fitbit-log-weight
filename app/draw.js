@@ -23,7 +23,7 @@ const TXT_ERROR = document.getElementById("txt-error");
 
 const NOTHING_LOGGED_MESSAGE = "No entry";
 const WEIGHT_INCREMENT = 0.1;
-const LOADING_TIMEOUT_SECONDS = 3;
+const LOADING_TIMEOUT_SECONDS = 5;
 const BMI_DECIMALS = 1;
 
 const UNITS = {
