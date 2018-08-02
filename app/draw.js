@@ -1,6 +1,6 @@
 import document from "document";
 
-import { getDateString } from "../common/utils.js";
+import { getDateString, setNoDecimals } from "../common/utils.js";
 import { debug } from "../common/log.js";
 
 import { getLocalStorage } from "localStorage";
@@ -22,9 +22,40 @@ const TXT_BMI = document.getElementById("bmi");
 const TXT_ERROR = document.getElementById("txt-error");
 
 const NOTHING_LOGGED_MESSAGE = "No entry";
-const DEFAULT_WEIGHT = 60;
 const WEIGHT_INCREMENT = 0.1;
-const LOADING_TIMEOUT_SECONDS = 5;
+const LOADING_TIMEOUT_SECONDS = 3;
+const BMI_DECIMALS = 1;
+
+const UNITS = {
+  kg: {
+    displayName: "kg",
+    decimals: 1,
+    increment: 0.1,
+    defaultWeight: 60
+  },
+  pounds: {
+    displayName: "lbs",
+    decimals: 1,
+    increment: 0.5,
+    defaultWeight: 132
+  },
+  stone: {
+    displayName: "st",
+    decimals: 2,
+    increment: 1 / 14,
+    defaultWeight: 9.5
+  }
+};
+
+const getUnit = () => {
+  const localStorage = getLocalStorage();
+
+  if (localStorage.unit) {
+    return UNITS[localStorage.unit];
+  }
+
+  return UNITS.kg;
+};
 
 const nothingLoggedToday = dateString => {
   DATE.text = dateString;
@@ -36,6 +67,7 @@ const nothingLoggedToday = dateString => {
 
 const renderAddEntry = () => {
   const localStorage = getLocalStorage();
+  const unit = getUnit();
 
   ADD_BUTTON.style.display = "none";
   SAVE_BUTTON.style.display = "inline";
@@ -44,26 +76,35 @@ const renderAddEntry = () => {
   STATUS_MESSAGE.text = "";
 
   if (localStorage.latestEntry) {
-    WEIGHT_ABOUT_TO_BE_LOGGED.text = `${localStorage.latestEntry} kg`;
+    WEIGHT_ABOUT_TO_BE_LOGGED.text = `${setNoDecimals(
+      localStorage.latestEntry,
+      unit.decimals,
+      Math.floor
+    )} ${unit.displayName}`;
   } else {
-    WEIGHT_ABOUT_TO_BE_LOGGED.text = `${DEFAULT_WEIGHT} kg`;
+    WEIGHT_ABOUT_TO_BE_LOGGED.text = `${setNoDecimals(
+      unit.defaultWeight,
+      unit.decimals,
+      Math.floor
+    )} ${unit.displayName}`;
   }
 };
 
 const renderIncreaseWeight = () => {
-  incrementWeight(WEIGHT_INCREMENT);
+  incrementWeight(getUnit().increment);
 };
 
 const renderDecreaseWeight = () => {
-  incrementWeight(-WEIGHT_INCREMENT);
+  incrementWeight(-getUnit().increment);
 };
 
 const incrementWeight = increment => {
   const roundMethod = increment > 0 ? Math.ceil : Math.floor;
   const newValue = getCurrentAboutToBeLoggedWeight() + increment;
-  const newValueRounded = roundMethod(newValue * 10) / 10.0;
+  const unit = getUnit();
+  const newValueRounded = setNoDecimals(newValue, unit.decimals, roundMethod);
 
-  WEIGHT_ABOUT_TO_BE_LOGGED.text = `${newValueRounded} kg`;
+  WEIGHT_ABOUT_TO_BE_LOGGED.text = `${newValueRounded} ${unit.displayName}`;
 };
 
 const getCurrentAboutToBeLoggedWeight = () => {
@@ -83,6 +124,7 @@ const renderSaveEntry = () => {
 const drawTodayScreen = () => {
   const localStorage = getLocalStorage();
   const todayString = getDateString(new Date());
+  const unit = getUnit();
 
   if (localStorage.today) {
     // ^ Could be data from yesterday
@@ -101,8 +143,16 @@ const drawTodayScreen = () => {
     } else {
       clearError();
 
-      WEIGHT_LOGGED.text = `${today.value} kg`;
-      TXT_BMI.text = `BMI: ${today.bmi}`;
+      WEIGHT_LOGGED.text = `${setNoDecimals(
+        today.value,
+        unit.decimals,
+        Math.floor
+      )} ${unit.displayName}`;
+      TXT_BMI.text = `BMI: ${setNoDecimals(
+        today.bmi,
+        BMI_DECIMALS,
+        Math.floor
+      )}`;
       STATUS_MESSAGE.text = "";
       ADD_BUTTON.style.display = "none";
     }

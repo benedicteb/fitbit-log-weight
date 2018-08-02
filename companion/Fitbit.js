@@ -1,6 +1,7 @@
+import secrets from "../secrets.json";
+
 import { debug, error } from "../common/log.js";
 import { getDateString } from "../common/utils.js";
-import secrets from "../secrets.json";
 import { b64EncodeUnicode } from "../common/base64.js";
 
 import { updateOauthSettings } from "companionSettings";
@@ -21,9 +22,19 @@ const sortEntriesByDate = entries => {
 };
 
 class Fitbit {
-  constructor(oauthData) {
+  constructor(oauthData, weightUnit) {
     this.oauthData = oauthData;
     this.retries = 0;
+
+    if (weightUnit === "kg") {
+      this.acceptLanguageHeader = "metric";
+    } else if (weightUnit === "pounds") {
+      this.acceptLanguageHeader = "en_US";
+    } else if (weightUnit === "stone") {
+      this.acceptLanguageHeader = "en_GB";
+    } else {
+      this.acceptLanguageHeader = "metric";
+    }
   }
 
   getWeightToday() {
@@ -34,19 +45,19 @@ class Fitbit {
     return this.getUrl(`${WEIGHT_URL}/date/${getDateString(date)}.json`);
   }
 
-  getLastThirtyDays() {
+  getLastSevenDays() {
     return this.getUrl(
-      `${WEIGHT_URL}/date/${getDateString(new Date())}/30d.json`
+      `${WEIGHT_URL}/date/${getDateString(new Date())}/7d.json`
     );
   }
 
   getLastEntry() {
-    return this.getLastThirtyDays().then(entriesLastThirtyDays => {
-      if (!entriesLastThirtyDays) {
+    return this.getLastSevenDays().then(entriesLastSevenDays => {
+      if (!entriesLastSevenDays) {
         return null;
       }
 
-      const sortedEntries = sortEntriesByDate(entriesLastThirtyDays.weight);
+      const sortedEntries = sortEntriesByDate(entriesLastSevenDays.weight);
 
       if (sortedEntries.length > 0) {
         return sortedEntries[0];
@@ -84,7 +95,8 @@ class Fitbit {
         Authorization: `${this.oauthData.token_type} ${
           this.oauthData.access_token
         }`,
-        "Content-Type": contentType
+        "Content-Type": contentType,
+        "Accept-Language": this.acceptLanguageHeader
       },
       body: body
     })

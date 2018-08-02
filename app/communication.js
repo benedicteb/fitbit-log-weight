@@ -45,6 +45,15 @@ const initMessaging = () => {
       writeLocalStorage("latestEntry", evt.data.value);
     } else if (evt.data.key === "ERROR") {
       renderError();
+    } else if (evt.data.key === "UNIT") {
+      const localStorage = getLocalStorage();
+      const newUnit = evt.data.value;
+      
+      writeLocalStorage("unit", evt.data.value);
+      
+      if (localStorage.unit != newUnit) {
+        drawTodayScreen();
+      }
     }
   };
 
