@@ -1,8 +1,9 @@
 # Log weight
 
-This app does one single thing - it lets you log your weight to Fitbit directly
-from your Versa or Ionic. When adding an entry for today it will, if possible,
-use yesterdays weight as a starting point. From there you can go up or down.
+This app does one single thing - it lets you log your weight today to Fitbit
+directly from your Versa or Ionic. When adding an entry for today it will,
+if possible, use yesterdays weight as a starting point. From there you can go
+up or down.
 
 In order to function this app requires a connection to your phone and internet
 to communicate with Fitbit.
