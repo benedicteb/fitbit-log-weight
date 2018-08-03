@@ -1,8 +1,8 @@
 # Log weight
 
 This app does one single thing - it lets you log your weight to Fitbit directly
-from your Versa or Ionic. When adding an entry for today it will if possible use
-yesterdays weight as a starting point. From there you can go up or down.
+from your Versa or Ionic. When adding an entry for today it will, if possible,
+use yesterdays weight as a starting point. From there you can go up or down.
 
 In order to function this app requires a connection to your phone and internet
 to communicate with Fitbit.
@@ -29,7 +29,7 @@ water intake directly from your watch.
 ## Acknowledgements
 
 Even though Fitbit has created a very nice and easy to use ecosystem for
-developing for Fitbit OS. Keeping this app open source would have been way more
+developing for Fitbit OS, keeping this app open source would have been way more
 difficult without the amazing [FitbitFS](https://github.com/jrtm/FitbitFS). You
 should take a look at it if you're thinking about writing open source apps for
 Fitbit OS! It lets you sync your Fitbit Studio files onto your local drive.
