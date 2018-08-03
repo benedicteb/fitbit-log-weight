@@ -1,16 +1,16 @@
 import { initMessaging } from "communication";
 import { drawTodayScreen, startSpinner } from "draw";
 import { initListeners } from "eventListeners";
-import { getLocalStorage } from "localStorage";
+import { readLocalStorage } from "localStorage";
 import { requestLatestEntryIfNoneExists, wipeTodayIfNewDay } from "data";
 
-const localStorageAtBoot = getLocalStorage();
+const localStorage = readLocalStorage();
 
-initMessaging();
-initListeners();
+initMessaging(localStorage);
+initListeners(localStorage);
 
-wipeTodayIfNewDay(localStorageAtBoot);
-requestLatestEntryIfNoneExists(localStorageAtBoot);
+wipeTodayIfNewDay(localStorage);
+requestLatestEntryIfNoneExists(localStorage);
 
-drawTodayScreen();
+drawTodayScreen(localStorage);
 startSpinner();

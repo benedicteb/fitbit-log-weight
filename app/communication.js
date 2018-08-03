@@ -3,16 +3,15 @@ import * as messaging from "messaging";
 import { debug, error } from "../common/log.js";
 
 import { saveLatestEntry } from "data";
-import { getLocalStorage, writeLocalStorage } from "localStorage";
-import { drawTodayScreen, renderError, stopSpinner } from "draw";
+import { writeLocalStorage } from "localStorage";
+import { drawTodayScreen, renderError, stopSpinner, startSpinner } from "draw";
 
-const initMessaging = () => {
+const initMessaging = localStorage => {
   // Message is received
   messaging.peerSocket.onmessage = evt => {
     debug(`App received: ${JSON.stringify(evt, undefined, 2)}`);
 
     if (evt.data.key === "WEIGHT_TODAY") {
-      const localStorage = getLocalStorage();
       let changed = false;
 
       if (localStorage.today) {
@@ -23,7 +22,7 @@ const initMessaging = () => {
         if (
           lastDate != evt.data.date ||
           lastValue != evt.data.value ||
-          !lastBmi
+          lastBmi != evt.data.bmi
         ) {
           changed = true;
         }
@@ -31,30 +30,31 @@ const initMessaging = () => {
         changed = true;
       }
 
-      writeLocalStorage("today", {
-        date: evt.data.date,
-        value: evt.data.value,
-        bmi: evt.data.bmi
-      });
-
       if (changed) {
-        drawTodayScreen();
+        localStorage.today = {
+          date: evt.data.date,
+          value: evt.data.value,
+          bmi: evt.data.bmi
+        };
+
+        writeLocalStorage(localStorage);
+        drawTodayScreen(localStorage);
       }
 
       // Stop spinner after data is received for today
       stopSpinner();
     } else if (evt.data.key === "LATEST_ENTRY") {
-      saveLatestEntry(evt.data.date, evt.data.value);
+      saveLatestEntry(evt.data.date, evt.data.value, localStorage);
     } else if (evt.data.key === "ERROR") {
       renderError();
     } else if (evt.data.key === "UNIT") {
-      const localStorage = getLocalStorage();
       const newUnit = evt.data.value;
 
-      writeLocalStorage("unit", evt.data.value);
+      if (!localStorage.unit || localStorage.unit != newUnit) {
+        localStorage.unit = newUnit;
+        writeLocalStorage(localStorage);
 
-      if (localStorage.unit != newUnit) {
-        drawTodayScreen();
+        startSpinner();
       }
     }
   };

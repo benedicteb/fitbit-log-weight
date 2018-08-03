@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync, statSync } from "fs";
 import config from "../common/config.json";
 import { debug } from "../common/log.js";
 
-const getLocalStorage = () => {
+const readLocalStorage = () => {
   const filename = config.localStorageFile;
 
   try {
@@ -17,31 +17,22 @@ const getLocalStorage = () => {
 
   debug(`Local storage fetched: ${JSON.stringify(localStorage, undefined, 2)}`);
 
+  if (!localStorage.unit && !localStorage.today && !localStorage.latestEntry) {
+    debug(
+      `Local storage has none of the usual keys, might be error. Returning {}`
+    );
+    return {};
+  }
+
   return localStorage;
 };
 
-const writeLocalStorage = (key, value) => {
+const writeLocalStorage = localStorage => {
   const filename = config.localStorageFile;
-  const newStorage = getLocalStorage();
-  let changed;
 
-  if (newStorage[key]) {
-    if (newStorage[key] !== value) {
-      changed = true;
-    } else {
-      changed = false;
-    }
-  } else {
-    changed = true;
-  }
+  writeFileSync(filename, localStorage, "json");
 
-  newStorage[key] = value;
-
-  writeFileSync(filename, newStorage, "json");
-
-  debug(`Local storage written: ${JSON.stringify(newStorage, undefined, 2)}`);
-
-  return changed;
+  debug(`Local storage written: ${JSON.stringify(localStorage, undefined, 2)}`);
 };
 
-export { getLocalStorage, writeLocalStorage };
+export { readLocalStorage, writeLocalStorage };

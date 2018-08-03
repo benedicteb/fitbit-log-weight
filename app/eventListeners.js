@@ -1,4 +1,15 @@
-import document from "document";
+import { getDateString } from "../common/utils.js";
+
+import { sendVal } from "communication";
+import { startSpinner } from "draw";
+import { writeLocalStorage } from "localStorage";
+
+import {
+  ADD_BUTTON,
+  SAVE_BUTTON,
+  INCREASE_BUTTON,
+  DECREASE_BUTTON
+} from "uiElements";
 
 import {
   renderAddEntry,
@@ -7,19 +18,10 @@ import {
   renderDecreaseWeight,
   getCurrentAboutToBeLoggedWeight
 } from "draw";
-import { sendVal } from "communication";
-import { writeLocalStorage } from "localStorage";
-import { getDateString } from "../common/utils.js";
-import { startSpinner } from "draw";
 
-const ADD_BUTTON = document.getElementById("btn-add");
-const SAVE_BUTTON = document.getElementById("btn-save");
-const INCREASE_BUTTON = document.getElementById("btn-increment");
-const DECREASE_BUTTON = document.getElementById("btn-decrease");
-
-const initListeners = () => {
+const initListeners = localStorage => {
   ADD_BUTTON.onactivate = event => {
-    renderAddEntry();
+    renderAddEntry(localStorage);
   };
 
   SAVE_BUTTON.onactivate = event => {
@@ -33,19 +35,21 @@ const initListeners = () => {
       value: value
     });
 
-    writeLocalStorage("today", {
+    localStorage.today = {
       date: getDateString(new Date()),
       value: value,
       bmi: null
-    });
+    };
+
+    writeLocalStorage(localStorage);
   };
 
   INCREASE_BUTTON.onactivate = event => {
-    renderIncreaseWeight();
+    renderIncreaseWeight(localStorage);
   };
 
   DECREASE_BUTTON.onactivate = event => {
-    renderDecreaseWeight();
+    renderDecreaseWeight(localStorage);
   };
 };
 

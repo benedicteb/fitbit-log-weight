@@ -20,7 +20,11 @@ const requestLatestEntryIfNoneExists = localStorage => {
         localStorage.today.value
       } as latest entry`
     );
-    saveLatestEntry(localStorage.today.date, localStorage.today.value);
+    saveLatestEntry(
+      localStorage.today.date,
+      localStorage.today.value,
+      localStorage
+    );
     return;
   }
 
@@ -42,20 +46,24 @@ const wipeTodayIfNewDay = localStorage => {
 
   if (localStorage.today) {
     if (dateStringToday != localStorage.today.date) {
-      writeLocalStorage("today", {
+      localStorage.today = {
         bmi: null,
         value: null,
         date: dateStringToday
-      });
+      };
+
+      writeLocalStorage(localStorage);
     }
   }
 };
 
-const saveLatestEntry = (date, value) => {
-  writeLocalStorage("latestEntry", {
+const saveLatestEntry = (date, value, localStorage) => {
+  localStorage.latestEntry = {
     date: date,
     value: value
-  });
+  };
+
+  writeLocalStorage(localStorage);
 };
 
 export { requestLatestEntryIfNoneExists, saveLatestEntry, wipeTodayIfNewDay };

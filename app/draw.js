@@ -1,29 +1,24 @@
-import document from "document";
-
 import { getDateString, setNoDecimals } from "../common/utils.js";
 import { debug } from "../common/log.js";
 
-import { getLocalStorage } from "localStorage";
-
-const DATE = document.getElementById("date");
-const STATUS_MESSAGE = document.getElementById("status-message");
-const WEIGHT_LOGGED = document.getElementById("weight-logged");
-const WEIGHT_ABOUT_TO_BE_LOGGED = document.getElementById(
-  "weight-about-to-be-logged"
-);
-
-const ADD_BUTTON = document.getElementById("btn-add");
-const SAVE_BUTTON = document.getElementById("btn-save");
-const INCREASE_BUTTON = document.getElementById("btn-increment");
-const DECREASE_BUTTON = document.getElementById("btn-decrease");
-const ERROR_ICON = document.getElementById("error-icon");
-const SPINNER = document.getElementById("spinner");
-const TXT_BMI = document.getElementById("bmi");
-const TXT_ERROR = document.getElementById("txt-error");
+import {
+  DATE,
+  STATUS_MESSAGE,
+  WEIGHT_LOGGED,
+  WEIGHT_ABOUT_TO_BE_LOGGED,
+  ADD_BUTTON,
+  SAVE_BUTTON,
+  INCREASE_BUTTON,
+  DECREASE_BUTTON,
+  ERROR_ICON,
+  SPINNER,
+  TXT_BMI,
+  TXT_ERROR
+} from "uiElements";
 
 const NOTHING_LOGGED_MESSAGE = "No entry";
 const WEIGHT_INCREMENT = 0.1;
-const LOADING_TIMEOUT_SECONDS = 5;
+const LOADING_TIMEOUT_SECONDS = 6;
 const BMI_DECIMALS = 1;
 
 const UNITS = {
@@ -47,9 +42,7 @@ const UNITS = {
   }
 };
 
-const getUnit = () => {
-  const localStorage = getLocalStorage();
-
+const getUnit = localStorage => {
   if (localStorage.unit) {
     return UNITS[localStorage.unit];
   }
@@ -65,9 +58,8 @@ const nothingLoggedToday = dateString => {
   TXT_BMI.text = "";
 };
 
-const renderAddEntry = () => {
-  const localStorage = getLocalStorage();
-  const unit = getUnit();
+const renderAddEntry = localStorage => {
+  const unit = getUnit(localStorage);
 
   ADD_BUTTON.style.display = "none";
   SAVE_BUTTON.style.display = "inline";
@@ -90,18 +82,19 @@ const renderAddEntry = () => {
   }
 };
 
-const renderIncreaseWeight = () => {
-  incrementWeight(getUnit().increment);
+const renderIncreaseWeight = localStorage => {
+  const unit = getUnit(localStorage);
+  incrementWeight(unit.increment, unit);
 };
 
-const renderDecreaseWeight = () => {
-  incrementWeight(-getUnit().increment);
+const renderDecreaseWeight = localStorage => {
+  const unit = getUnit(localStorage);
+  incrementWeight(-unit.increment, unit);
 };
 
-const incrementWeight = increment => {
+const incrementWeight = (increment, unit) => {
   const roundMethod = increment > 0 ? Math.ceil : Math.floor;
   const newValue = getCurrentAboutToBeLoggedWeight() + increment;
-  const unit = getUnit();
   const newValueRounded = setNoDecimals(newValue, unit.decimals, roundMethod);
 
   WEIGHT_ABOUT_TO_BE_LOGGED.text = `${newValueRounded} ${unit.displayName}`;
@@ -121,10 +114,9 @@ const renderSaveEntry = () => {
   DECREASE_BUTTON.style.display = "none";
 };
 
-const drawTodayScreen = () => {
-  const localStorage = getLocalStorage();
+const drawTodayScreen = localStorage => {
   const todayString = getDateString(new Date());
-  const unit = getUnit();
+  const unit = getUnit(localStorage);
 
   if (localStorage.today) {
     // ^ Could be data from yesterday
@@ -162,8 +154,6 @@ const drawTodayScreen = () => {
     STATUS_MESSAGE.text = "Loading...";
 
     setTimeout(() => {
-      const localStorage = getLocalStorage();
-
       if (!localStorage.today) {
         WEIGHT_LOGGED.text = "";
         DATE.text = "";
