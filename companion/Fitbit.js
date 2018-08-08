@@ -79,7 +79,7 @@ class Fitbit {
   }
 
   getUrl(url) {
-    return this.openUrl(url, "GET", null, "application/json");
+    return this.openUrl(url, "GET", undefined, "application/json");
   }
 
   postUrl(url, body) {
@@ -87,19 +87,27 @@ class Fitbit {
   }
 
   openUrl(url, method, body, contentType) {
-    debug(`${method} ${url} ${body}`);
+    const tokenType = this.oauthData.token_type;
+    const accessToken = this.oauthData.access_token;
 
-    return fetch(url, {
+    const headers = {
+      Authorization: `${tokenType} ${accessToken}`,
+      "Content-Type": contentType,
+      "Accept-Language": this.acceptLanguageHeader
+    };
+
+    const options = {
       method: method,
-      headers: {
-        Authorization: `${this.oauthData.token_type} ${
-          this.oauthData.access_token
-        }`,
-        "Content-Type": contentType,
-        "Accept-Language": this.acceptLanguageHeader
-      },
-      body: body
-    })
+      headers: headers
+    };
+
+    if (method === "POST" && body) {
+      options.body = body;
+    }
+
+    debug(`${url} ${JSON.stringify(options, undefined, 2)}`);
+
+    return fetch(url, options)
       .then(response => {
         if (!response.ok) {
           debug(`Bad response: ${response.status}`);
